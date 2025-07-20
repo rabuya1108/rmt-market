@@ -2,133 +2,149 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>出品一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RMTマーケット</title>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #fff;
-      color: #222;
-      padding: 1rem;
-      max-width: 480px;
-      margin: auto;
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 2em;
     }
-
-    h1 {
-      font-size: 1.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+    input, button {
+      padding: 0.6em;
+      margin: 0.5em 0;
+      font-size: 1em;
+      width: 100%;
+      max-width: 400px;
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    input {
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 0.6rem;
-      background-color: #444;
-      color: white;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .item {
-      border: 1px solid #ddd;
+    .post-card {
+      background: #222;
+      padding: 1em;
+      margin: 1em 0;
+      border: 1px solid #444;
       border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background-color: #f9f9f9;
     }
-
-    .item h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .post-card button {
+      margin-right: 0.5em;
+      background-color: #555;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.4em 0.8em;
+      border-radius: 4px;
     }
-
-    .item p {
-      margin: 0.3rem 0;
-    }
-
-    @media (max-width: 360px) {
-      body {
-        padding: 0.5rem;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      input,
-      button {
-        font-size: 0.95rem;
-      }
+    .post-card button:hover {
+      background-color: #777;
     }
   </style>
 </head>
 <body>
-  <h1>🛍️ 出品一覧</h1>
+  <h1>RMTマーケット</h1>
 
-  <form id="form">
-    <input type="text" id="title" placeholder="タイトル" required />
-    <input type="number" id="price" placeholder="価格" required />
-    <input type="text" id="seller" placeholder="出品者名" required />
-    <button type="submit">出品する</button>
-  </form>
+  <input id="itemName" placeholder="商品名" />
+  <input id="itemPrice" placeholder="価格" />
+  <input id="sellerName" placeholder="あなたの名前" />
+  <button id="postBtn">出品</button>
 
-  <div id="listings">
-    <!-- 出品がここに追加されます -->
-  </div>
+  <div id="posts"></div>
 
-  <script>
-    const listings = [
-      { title: "モンハン：護石代行", price: "1000", seller: "代行屋A", emoji: "🎮" },
-      { title: "FF14：ギル1000万", price: "1500", seller: "ギル販売X", emoji: "💰" },
-      { title: "原神：星5アカウント", price: "2500", seller: "神引き屋", emoji: "📦" },
-    ];
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    const listContainer = document.getElementById("listings");
+    const firebaseConfig = {
+      apiKey: "AIzaSyC-vljhQcGPgd3g4VLLUN5xkIzD0NTVNV8",
+      authDomain: "rmt-market.firebaseapp.com",
+      projectId: "rmt-market",
+      storageBucket: "rmt-market.firebasestorage.app",
+      messagingSenderId: "573324963079",
+      appId: "1:573324963079:web:ff9109e3bee9710ff529a2",
+      measurementId: "G-219L8N300W",
+      databaseURL: "https://rmt-market-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
 
-    function render() {
-      listContainer.innerHTML = "";
-      listings.forEach((item) => {
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `
-          <h2>${item.emoji} ${item.title}</h2>
-          <p>💴 ${item.price}円</p>
-          <p>🧑‍💻 出品者: ${item.seller}</p>
-        `;
-        listContainer.appendChild(div);
-      });
-    }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    document.getElementById("form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const title = document.getElementById("title").value;
-      const price = document.getElementById("price").value;
-      const seller = document.getElementById("seller").value;
-      listings.push({ title, price, seller, emoji: "🆕" });
-      render();
-      this.reset();
+    const itemInput = document.getElementById("itemName");
+    const priceInput = document.getElementById("itemPrice");
+    const sellerInput = document.getElementById("sellerName");
+    const postBtn = document.getElementById("postBtn");
+    const postsContainer = document.getElementById("posts");
+
+    let editingKey = null;
+
+    postBtn.addEventListener("click", () => {
+      const item = itemInput.value;
+      const price = priceInput.value;
+      const seller = sellerInput.value;
+
+      if (!item || !price || !seller) return alert("すべて入力してね");
+
+      const data = { item, price, seller };
+
+      if (editingKey) {
+        update(ref(db, 'posts/' + editingKey), data);
+        editingKey = null;
+        postBtn.textContent = "出品";
+      } else {
+        push(ref(db, 'posts'), data);
+      }
+
+      itemInput.value = "";
+      priceInput.value = "";
     });
 
-    render();
+    onChildAdded(ref(db, 'posts'), (snapshot) => {
+      const post = snapshot.val();
+      const key = snapshot.key;
+
+      const card = document.createElement("div");
+      card.className = "post-card";
+
+      const name = document.createElement("p");
+      name.innerHTML = `<strong>商品名:</strong> ${post.item}`;
+      const price = document.createElement("p");
+      price.innerHTML = `<strong>価格:</strong> ${post.price}`;
+      const seller = document.createElement("p");
+      seller.innerHTML = `<strong>出品者:</strong> ${post.seller}`;
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✏️ 編集";
+      editBtn.style.display = "none";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️ 削除";
+      deleteBtn.style.display = "none";
+
+      // 入力した出品者名と一致すれば表示
+      if (post.seller === sellerInput.value) {
+        editBtn.style.display = "inline-block";
+        deleteBtn.style.display = "inline-block";
+      }
+
+      editBtn.onclick = () => {
+        itemInput.value = post.item;
+        priceInput.value = post.price;
+        editingKey = key;
+        postBtn.textContent = "保存";
+      };
+
+      deleteBtn.onclick = () => {
+        if (confirm("本当に削除する？")) {
+          remove(ref(db, 'posts/' + key));
+          card.remove();
+        }
+      };
+
+      card.appendChild(name);
+      card.appendChild(price);
+      card.appendChild(seller);
+      card.appendChild(editBtn);
+      card.appendChild(deleteBtn);
+      postsContainer.appendChild(card);
+    });
   </script>
 </body>
 </html>

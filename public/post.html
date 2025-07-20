@@ -1,19 +1,62 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>出品ページ</title>
-  <script type="module" src="/app/submit-post.js"></script>
-</head>
-<body>
-  <h1>📝 出品ページ</h1>
-  <form id="postForm">
-    <input type="text" id="item" placeholder="タイトル" required><br>
-    <input type="number" id="price" placeholder="価格" required><br>
-    <input type="text" id="seller" placeholder="出品者名" required><br>
-    <textarea id="description" placeholder="商品説明"></textarea><br>
-    <input type="file" id="images" multiple accept="image/*"><br>
-    <button type="submit">出品する</button>
-  </form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>出品フォーム</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #121212;
+        color: white;
+        padding: 20px;
+      }
+
+      form {
+        max-width: 500px;
+        margin: auto;
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      input, textarea {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        border: none;
+        background-color: #2a2a2a;
+        color: white;
+      }
+
+      button {
+        background-color: #ff5722;
+        color: white;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      h2 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>出品フォーム</h2>
+    <form>
+      <input type="text" id="title" placeholder="商品名" required />
+      <input type="text" id="price" placeholder="価格" required />
+      <input type="text" id="seller" placeholder="出品者名" required />
+      <textarea id="description" placeholder="商品説明" rows="4" required></textarea>
+      <input type="file" id="images" multiple />
+      <button type="submit">出品する</button>
+    </form>
+
+    <!-- ✅ 追加すべきスクリプト -->
+    <script type="module" src="../app/submit-post.js"></script>
+  </body>
 </html>

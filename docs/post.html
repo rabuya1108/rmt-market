@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>出品フォーム</title>
+</head>
+<body>
+  <h1>出品フォーム</h1>
+  <form>
+    <label>商品名: <input type="text" id="title" required /></label><br />
+    <label>価格: <input type="number" id="price" required /></label><br />
+    <label>出品者: <input type="text" id="seller" required /></label><br />
+    <label>説明: <textarea id="description"></textarea></label><br />
+    <label>画像: <input type="file" id="images" multiple /></label><br />
+    <button type="submit">出品</button>
+  </form>
+
+  <script type="module" src="../app/submit-post.js"></script>
+</body>
+</html>

@@ -1,12 +1,60 @@
-// submit.js - 出品処理とFirebase保存（画像対応） import { db } from './firebase.js'; import { ref, push } from 'firebase/database';
+import { db } from './firebase.js';
+import { ref, push, onChildAdded, remove, update } from 'firebase/database';
 
-const itemInput = document.getElementById('itemName'); const priceInput = document.getElementById('itemPrice'); const sellerInput = document.getElementById('sellerName'); const descInput = document.getElementById('itemDesc'); const imageInputs = document.querySelectorAll('.image-input'); const postBtn = document.getElementById('postBtn');
+const itemInput = document.getElementById('itemName');
+const priceInput = document.getElementById('itemPrice');
+const sellerInput = document.getElementById('sellerName');
+const postBtn = document.getElementById('postBtn');
+const postsContainer = document.getElementById('posts');
 
-postBtn.addEventListener('click', () => { const item = itemInput.value.trim(); const price = priceInput.value.trim(); const seller = sellerInput.value.trim(); const description = descInput.value.trim(); const images = [];
+let editingKey = null;
 
-imageInputs.forEach(input => { if (input.value.trim() !== '') { images.push(input.value.trim()); } });
+// 投稿ボタン処理
+postBtn?.addEventListener('click', () => {
+  const itemName = itemInput.value;
+  const itemPrice = priceInput.value;
+  const sellerName = sellerInput.value;
 
-if (!item || !price || !seller) return alert('未入力の項目があります');
+  if (!itemName || !itemPrice || !sellerName) return;
 
-const postData = { item, price, seller, description, images }; push(ref(db, 'posts'), postData) .then(() => { itemInput.value = ''; priceInput.value = ''; sellerInput.value = ''; descInput.value = ''; imageInputs.forEach(input => input.value = ''); alert('出品しました'); }); });
+  const postData = {
+    item: itemName,
+    price: itemPrice,
+    seller: sellerName,
+    description: '', // あとで編集可能にする
+  };
 
+  push(ref(db, 'posts'), postData);
+
+  itemInput.value = '';
+  priceInput.value = '';
+  sellerInput.value = '';
+});
+
+// 投稿一覧表示処理
+onChildAdded(ref(db, 'posts'), (snapshot) => {
+  const post = snapshot.val();
+  const key = snapshot.key;
+
+  const card = document.createElement('div');
+  card.className = 'post-card';
+  card.style.cursor = 'pointer';
+  card.onclick = () => {
+    window.location.href = `post.html?id=${key}`;
+  };
+
+  const title = document.createElement('h3');
+  title.textContent = post.item;
+
+  const price = document.createElement('p');
+  price.textContent = `💴 ${post.price}円`;
+
+  const seller = document.createElement('p');
+  seller.textContent = `👤 出品者: ${post.seller}`;
+
+  card.appendChild(title);
+  card.appendChild(price);
+  card.appendChild(seller);
+
+  postsContainer?.appendChild(card);
+});

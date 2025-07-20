@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出品ページ</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    input[type="file"] {
+      margin-top: 0.5rem;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 出品ページ</h1>
+  <form id="postForm">
+    <div class="form-group">
+      <label for="itemName">タイトル</label>
+      <input type="text" id="itemName" required />
+    </div>
+    <div class="form-group">
+      <label for="itemPrice">価格（円）</label>
+      <input type="text" id="itemPrice" required />
+    </div>
+    <div class="form-group">
+      <label for="sellerName">出品者名</label>
+      <input type="text" id="sellerName" required />
+    </div>
+    <div class="form-group">
+      <label for="itemDescription">商品説明</label>
+      <textarea id="itemDescription" rows="4"></textarea>
+    </div>
+    <div class="form-group">
+      <label>画像（最大8枚）</label>
+      <input type="file" id="imageInput" accept="image/*" multiple />
+      <div class="preview" id="imagePreview"></div>
+    </div>
+    <button type="submit">出品する</button>
+  </form>
+
+  <script>
+    // 画像プレビュー表示
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', () => {
+      imagePreview.innerHTML = '';
+      const files = imageInput.files;
+      [...files].slice(0, 8).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+
+  <!-- ✅ ここが重要：モジュールの読み込み先を正しく指定 -->
+  <script type="module" src="app/submit-post.js"></script>
+</body>
+</html>

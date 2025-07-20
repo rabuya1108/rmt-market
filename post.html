@@ -1,69 +1,100 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html><html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>投稿詳細 | RMTマーケット</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出品ページ</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    input[type="file"] {
+      margin-top: 0.5rem;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <h1>🎮 投稿詳細</h1>
-    <a href="index.html" class="btn-back">← 戻る</a>
-  </header>
+  <h1>📝 出品ページ</h1>
+  <form id="postForm">
+    <div class="form-group">
+      <label for="itemName">タイトル</label>
+      <input type="text" id="itemName" required />
+    </div>
+    <div class="form-group">
+      <label for="itemPrice">価格（円）</label>
+      <input type="text" id="itemPrice" required />
+    </div>
+    <div class="form-group">
+      <label for="sellerName">出品者名</label>
+      <input type="text" id="sellerName" required />
+    </div>
+    <div class="form-group">
+      <label for="itemDescription">商品説明</label>
+      <textarea id="itemDescription" rows="4"></textarea>
+    </div>
+    <div class="form-group">
+      <label>画像（最大8枚）</label>
+      <input type="file" id="imageInput" accept="image/*" multiple />
+      <div class="preview" id="imagePreview"></div>
+    </div>
+    <button type="submit">出品する</button>
+  </form>  <script>
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
 
-  <main class="post-detail" id="postDetail">
-    <!-- 詳細データがここに表示されます -->
-  </main>
-
-  <script type="module">
-    import { db } from './firebase.js';
-    import { ref, get } from 'firebase/database';
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
-    const postRef = ref(db, 'posts/' + postId);
-
-    const postDetail = document.getElementById('postDetail');
-
-    get(postRef).then(snapshot => {
-      const post = snapshot.val();
-      if (!post) {
-        postDetail.innerHTML = '<p>投稿が見つかりませんでした。</p>';
-        return;
-      }
-
-      const title = document.createElement('h2');
-      title.textContent = post.item;
-
-      const price = document.createElement('p');
-      price.innerHTML = `<strong>💴 価格:</strong> ${post.price}円`;
-
-      const seller = document.createElement('p');
-      seller.innerHTML = `<strong>👤 出品者:</strong> ${post.seller}`;
-
-      const description = document.createElement('p');
-      description.innerHTML = `<strong>📝 説明:</strong><br>${post.description || '（説明なし）'}`;
-
-      const imageContainer = document.createElement('div');
-      imageContainer.className = 'image-grid';
-
-      for (let i = 0; i < 8; i++) {
-        const imgUrl = post['image' + i];
-        if (imgUrl) {
+    imageInput.addEventListener('change', () => {
+      imagePreview.innerHTML = '';
+      const files = imageInput.files;
+      [...files].slice(0, 8).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
           const img = document.createElement('img');
-          img.src = imgUrl;
-          img.alt = `画像${i + 1}`;
-          imageContainer.appendChild(img);
-        }
-      }
-
-      postDetail.appendChild(title);
-      postDetail.appendChild(price);
-      postDetail.appendChild(seller);
-      postDetail.appendChild(description);
-      postDetail.appendChild(imageContainer);
+          img.src = e.target.result;
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
     });
-  </script>
-</body>
+
+    document.getElementById('postForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('投稿処理はまだ未接続（Firebase連携予定）');
+      // ここにFirebase保存処理を書く予定だよ！
+    });
+  </script></body>
 </html>

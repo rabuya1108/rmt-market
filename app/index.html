@@ -3,17 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>出品フォーム</title>
+  <title>出品一覧</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ff85c1;
+    }
+
+    .listing {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .listing h2 {
+      font-size: 18px;
+      margin: 0 0 5px 0;
+    }
+
+    .listing p {
+      margin: 5px 0;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .listing h2 {
+        font-size: 16px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
-<body style="background:#111; color:white; font-family:sans-serif; padding:20px;">
-  <h2>商品を出品する</h2>
-  <form id="itemForm">
-    <label>タイトル: <input type="text" id="title" required /></label><br><br>
-    <label>価格（円）: <input type="number" id="price" required /></label><br><br>
-    <label>説明: <br><textarea id="description" rows="5" cols="30"></textarea></label><br><br>
-    <button type="submit">保存</button>
+<body>
+  <h1>🛍️ 出品一覧</h1>
+  <form id="form">
+    <input type="text" id="title" placeholder="タイトル" required />
+    <input type="text" id="price" placeholder="価格" required />
+    <input type="text" id="seller" placeholder="出品者名" required />
+    <button type="submit">出品する</button>
   </form>
-  <p id="status"></p>
+  <div id="output"></div>
+
   <script type="module" src="./submit.js"></script>
 </body>
 </html>

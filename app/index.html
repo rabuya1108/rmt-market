@@ -1,22 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!-- index.html - 商品一覧ページ（GameTrade風） --><!DOCTYPE html><html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RMTマーケット</title>
+  <title>RMTマーケット - 出品一覧</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>RMTマーケット</h1>
-  <form>
-    <input type="text" id="itemName" placeholder="商品名" />
-    <input type="text" id="itemPrice" placeholder="価格" />
-    <input type="text" id="sellerName" placeholder="出品者名" />
-    <input type="text" id="itemImage" placeholder="画像のURL" />
-    <button type="button" id="postBtn">出品</button>
-  </form>
-  <div id="posts"></div>
-
-  <script type="module" src="submit.js"></script>
-</body>
+  <header class="header">
+    <h1>🍯 RMTマーケット</h1>
+    <a href="post.html" class="btn-post">＋ 出品</a>
+  </header>  <main class="post-list" id="posts">
+    <!-- 投稿一覧がここに表示される -->
+  </main>  <script type="module" src="firebase.js"></script>  <script type="module" src="submit.js"></script></body>
 </html>

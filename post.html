@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -73,7 +74,10 @@
       <div class="preview" id="imagePreview"></div>
     </div>
     <button type="submit">出品する</button>
-  </form>  <script>
+  </form>
+
+  <script>
+    // 画像プレビュー表示
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
 
@@ -90,12 +94,9 @@
         reader.readAsDataURL(file);
       });
     });
+  </script>
 
-    document.getElementById('postForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('投稿処理はまだ未接続（Firebase連携予定）');
-      // ここにFirebase保存処理を書く予定だよ！
-    });
-  </script></body>
+  <!-- ✅ ここが重要：モジュールの読み込み先を正しく指定 -->
+  <script type="module" src="app/submit-post.js"></script>
+</body>
 </html>
-<script type="module" src="submit-post.js"></script>

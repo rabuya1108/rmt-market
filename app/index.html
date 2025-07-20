@@ -1,15 +1,74 @@
-<!-- index.html - 商品一覧ページ（GameTrade風） --><!DOCTYPE html><html lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RMTマーケット - 出品一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>出品一覧</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    form input {
+      padding: 8px;
+      margin-right: 5px;
+    }
+    .item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      background: #fff;
+    }
+    .post-link {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 10px 14px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <h1>🍯 RMTマーケット</h1>
-    <a href="post.html" class="btn-post">＋ 出品</a>
-  </header>  <main class="post-list" id="posts">
-    <!-- 投稿一覧がここに表示される -->
-  </main>  <script type="module" src="firebase.js"></script>  <script type="module" src="submit.js"></script></body>
+
+  <h1>🛍️ 出品一覧</h1>
+
+  <!-- 📤 出品ページへのリンク -->
+  <a class="post-link" href="post.html">📤 出品する</a>
+
+  <form id="searchForm">
+    <input type="text" id="searchTitle" placeholder="タイトル">
+    <input type="text" id="searchPrice" placeholder="価格">
+    <input type="text" id="searchSeller" placeholder="出品者名">
+    <button type="submit">出品する</button>
+  </form>
+
+  <div id="itemList">
+    <!-- 出品アイテムがここに表示される -->
+    <div class="item">
+      🎮 <strong>モンハン：護石代行</strong><br/>
+      💴 1000円<br/>
+      🧑‍💻 出品者: 代行屋A
+    </div>
+    <div class="item">
+      💰 <strong>FF14：ギル1000万</strong><br/>
+      💴 1500円<br/>
+      🧑‍💻 出品者: ギル販売X
+    </div>
+    <div class="item">
+      ⭐ <strong>原神：星5アカウント</strong><br/>
+      💴 2500円<br/>
+      🧑‍💻 出品者: 神引き屋
+    </div>
+  </div>
+
+</body>
 </html>

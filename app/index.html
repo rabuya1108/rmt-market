@@ -2,95 +2,133 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>出品一覧</title>
   <style>
     body {
-      font-family: "Arial", sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f9f9f9;
-      color: #333;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #fff;
+      color: #222;
+      padding: 1rem;
+      max-width: 480px;
+      margin: auto;
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 1.8rem;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
+    input {
+      padding: 0.6rem;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
+      border-radius: 5px;
+      font-size: 1rem;
     }
 
     button {
-      padding: 12px;
-      font-size: 16px;
-      background-color: #ff69b4;
+      padding: 0.6rem;
+      background-color: #444;
       color: white;
+      font-size: 1rem;
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      border-radius: 5px;
     }
 
-    button:hover {
-      background-color: #ff85c1;
+    .item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: #f9f9f9;
     }
 
-    .listing {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px;
-      margin-bottom: 15px;
+    .item h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .listing h2 {
-      font-size: 18px;
-      margin: 0 0 5px 0;
+    .item p {
+      margin: 0.3rem 0;
     }
 
-    .listing p {
-      margin: 5px 0;
-    }
+    @media (max-width: 360px) {
+      body {
+        padding: 0.5rem;
+      }
 
-    @media (max-width: 480px) {
       h1 {
-        font-size: 20px;
+        font-size: 1.5rem;
       }
 
-      .listing h2 {
-        font-size: 16px;
-      }
-
+      input,
       button {
-        font-size: 15px;
+        font-size: 0.95rem;
       }
     }
   </style>
 </head>
 <body>
   <h1>🛍️ 出品一覧</h1>
+
   <form id="form">
     <input type="text" id="title" placeholder="タイトル" required />
-    <input type="text" id="price" placeholder="価格" required />
+    <input type="number" id="price" placeholder="価格" required />
     <input type="text" id="seller" placeholder="出品者名" required />
     <button type="submit">出品する</button>
   </form>
-  <div id="output"></div>
 
-  <script type="module" src="./submit.js"></script>
+  <div id="listings">
+    <!-- 出品がここに追加されます -->
+  </div>
+
+  <script>
+    const listings = [
+      { title: "モンハン：護石代行", price: "1000", seller: "代行屋A", emoji: "🎮" },
+      { title: "FF14：ギル1000万", price: "1500", seller: "ギル販売X", emoji: "💰" },
+      { title: "原神：星5アカウント", price: "2500", seller: "神引き屋", emoji: "📦" },
+    ];
+
+    const listContainer = document.getElementById("listings");
+
+    function render() {
+      listContainer.innerHTML = "";
+      listings.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+          <h2>${item.emoji} ${item.title}</h2>
+          <p>💴 ${item.price}円</p>
+          <p>🧑‍💻 出品者: ${item.seller}</p>
+        `;
+        listContainer.appendChild(div);
+      });
+    }
+
+    document.getElementById("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const price = document.getElementById("price").value;
+      const seller = document.getElementById("seller").value;
+      listings.push({ title, price, seller, emoji: "🆕" });
+      render();
+      this.reset();
+    });
+
+    render();
+  </script>
 </body>
 </html>

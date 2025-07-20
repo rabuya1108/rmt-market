@@ -1,85 +1,86 @@
-/* 共通設定 */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
+  background-color: #121212;
+  color: white;
+  padding: 20px;
   margin: 0;
-  padding: 1rem;
-  color: #333;
 }
 
 h1 {
   text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
+  max-width: 500px;
+  margin: 0 auto 20px;
+}
+
+input, button {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
 }
 
 input {
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  width: 100%;
-  max-width: 250px;
+  background-color: #2a2a2a;
+  color: white;
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #007bff;
+  background-color: #00b894;
   color: white;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #019875;
 }
 
 #posts {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* 投稿カード */
 .post-card {
-  background-color: #fff;
+  background-color: #1e1e1e;
   border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* ボタン配置 */
+.post-card img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.post-card p {
+  margin: 5px 0;
+}
+
 .post-card button {
   margin-right: 10px;
+  background-color: #636e72;
+  font-size: 14px;
 }
 
-/* スマホ対応：画面が600px以下のとき */
-@media (max-width: 600px) {
-  form {
-    flex-direction: column;
-    align-items: stretch;
+@media screen and (max-width: 600px) {
+  form, #posts {
+    width: 90%;
   }
 
   input, button {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .post-card {
-    font-size: 0.95rem;
-  }
-
-  h1 {
-    font-size: 1.5rem;
+    font-size: 14px;
   }
 }

@@ -4,15 +4,17 @@ import { ref, push, onChildAdded, remove, update } from 'firebase/database';
 const itemInput = document.getElementById('itemName');
 const priceInput = document.getElementById('itemPrice');
 const sellerInput = document.getElementById('sellerName');
+const imageInput = document.getElementById('itemImage');
 const postBtn = document.getElementById('postBtn');
 const postsContainer = document.getElementById('posts');
 
 let editingKey = null;
 
 postBtn.addEventListener('click', () => {
-  const itemName = itemInput.value.trim();
-  const itemPrice = priceInput.value.trim();
-  const sellerName = sellerInput.value.trim();
+  const itemName = itemInput.value;
+  const itemPrice = priceInput.value;
+  const sellerName = sellerInput.value;
+  const imageUrl = imageInput.value;
 
   if (!itemName || !itemPrice || !sellerName) return;
 
@@ -20,6 +22,7 @@ postBtn.addEventListener('click', () => {
     item: itemName,
     price: itemPrice,
     seller: sellerName,
+    image: imageUrl || ""
   };
 
   if (editingKey) {
@@ -32,6 +35,8 @@ postBtn.addEventListener('click', () => {
 
   itemInput.value = '';
   priceInput.value = '';
+  sellerInput.value = '';
+  imageInput.value = '';
 });
 
 onChildAdded(ref(db, 'posts'), (snapshot) => {
@@ -41,24 +46,32 @@ onChildAdded(ref(db, 'posts'), (snapshot) => {
   const card = document.createElement('div');
   card.className = 'post-card';
 
+  if (post.image) {
+    const img = document.createElement('img');
+    img.src = post.image;
+    img.alt = post.item;
+    img.style.maxWidth = '100%';
+    img.style.borderRadius = '8px';
+    card.appendChild(img);
+  }
+
   const name = document.createElement('p');
   name.innerHTML = `<strong>商品名:</strong> ${post.item}`;
+
   const price = document.createElement('p');
   price.innerHTML = `<strong>価格:</strong> ${post.price}`;
+
   const seller = document.createElement('p');
   seller.innerHTML = `<strong>出品者:</strong> ${post.seller}`;
 
   const editBtn = document.createElement('button');
   editBtn.textContent = '✏️ 編集';
-  editBtn.className = 'edit-btn';
   editBtn.style.display = 'none';
 
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = '🗑️ 削除';
-  deleteBtn.className = 'delete-btn';
   deleteBtn.style.display = 'none';
 
-  // 自分が投稿者ならボタン表示
   if (post.seller === sellerInput.value) {
     editBtn.style.display = 'inline-block';
     deleteBtn.style.display = 'inline-block';
@@ -68,6 +81,7 @@ onChildAdded(ref(db, 'posts'), (snapshot) => {
     itemInput.value = post.item;
     priceInput.value = post.price;
     sellerInput.value = post.seller;
+    imageInput.value = post.image || '';
     editingKey = key;
     postBtn.textContent = '保存';
   };

@@ -2,149 +2,21 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RMTマーケット</title>
-  <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      margin: 2em;
-    }
-    input, button {
-      padding: 0.6em;
-      margin: 0.5em 0;
-      font-size: 1em;
-      width: 100%;
-      max-width: 400px;
-    }
-    .post-card {
-      background: #222;
-      padding: 1em;
-      margin: 1em 0;
-      border: 1px solid #444;
-      border-radius: 8px;
-    }
-    .post-card button {
-      margin-right: 0.5em;
-      background-color: #555;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      padding: 0.4em 0.8em;
-      border-radius: 4px;
-    }
-    .post-card button:hover {
-      background-color: #777;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>RMTマーケット</h1>
-
-  <input id="itemName" placeholder="商品名" />
-  <input id="itemPrice" placeholder="価格" />
-  <input id="sellerName" placeholder="あなたの名前" />
-  <button id="postBtn">出品</button>
-
+  <form>
+    <input type="text" id="itemName" placeholder="商品名" />
+    <input type="text" id="itemPrice" placeholder="価格" />
+    <input type="text" id="sellerName" placeholder="出品者名" />
+    <input type="text" id="itemImage" placeholder="画像のURL" />
+    <button type="button" id="postBtn">出品</button>
+  </form>
   <div id="posts"></div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyC-vljhQcGPgd3g4VLLUN5xkIzD0NTVNV8",
-      authDomain: "rmt-market.firebaseapp.com",
-      projectId: "rmt-market",
-      storageBucket: "rmt-market.firebasestorage.app",
-      messagingSenderId: "573324963079",
-      appId: "1:573324963079:web:ff9109e3bee9710ff529a2",
-      measurementId: "G-219L8N300W",
-      databaseURL: "https://rmt-market-default-rtdb.asia-southeast1.firebasedatabase.app"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const itemInput = document.getElementById("itemName");
-    const priceInput = document.getElementById("itemPrice");
-    const sellerInput = document.getElementById("sellerName");
-    const postBtn = document.getElementById("postBtn");
-    const postsContainer = document.getElementById("posts");
-
-    let editingKey = null;
-
-    postBtn.addEventListener("click", () => {
-      const item = itemInput.value;
-      const price = priceInput.value;
-      const seller = sellerInput.value;
-
-      if (!item || !price || !seller) return alert("すべて入力してね");
-
-      const data = { item, price, seller };
-
-      if (editingKey) {
-        update(ref(db, 'posts/' + editingKey), data);
-        editingKey = null;
-        postBtn.textContent = "出品";
-      } else {
-        push(ref(db, 'posts'), data);
-      }
-
-      itemInput.value = "";
-      priceInput.value = "";
-    });
-
-    onChildAdded(ref(db, 'posts'), (snapshot) => {
-      const post = snapshot.val();
-      const key = snapshot.key;
-
-      const card = document.createElement("div");
-      card.className = "post-card";
-
-      const name = document.createElement("p");
-      name.innerHTML = `<strong>商品名:</strong> ${post.item}`;
-      const price = document.createElement("p");
-      price.innerHTML = `<strong>価格:</strong> ${post.price}`;
-      const seller = document.createElement("p");
-      seller.innerHTML = `<strong>出品者:</strong> ${post.seller}`;
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "✏️ 編集";
-      editBtn.style.display = "none";
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "🗑️ 削除";
-      deleteBtn.style.display = "none";
-
-      // 入力した出品者名と一致すれば表示
-      if (post.seller === sellerInput.value) {
-        editBtn.style.display = "inline-block";
-        deleteBtn.style.display = "inline-block";
-      }
-
-      editBtn.onclick = () => {
-        itemInput.value = post.item;
-        priceInput.value = post.price;
-        editingKey = key;
-        postBtn.textContent = "保存";
-      };
-
-      deleteBtn.onclick = () => {
-        if (confirm("本当に削除する？")) {
-          remove(ref(db, 'posts/' + key));
-          card.remove();
-        }
-      };
-
-      card.appendChild(name);
-      card.appendChild(price);
-      card.appendChild(seller);
-      card.appendChild(editBtn);
-      card.appendChild(deleteBtn);
-      postsContainer.appendChild(card);
-    });
-  </script>
+  <script type="module" src="submit.js"></script>
 </body>
 </html>

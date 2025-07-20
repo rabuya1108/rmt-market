@@ -1,32 +1,46 @@
-<!-- ✅ 修正済み index.html -->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>出品一覧</title>
-  <link rel="stylesheet" href="../styles/globals.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RMTマーケット｜出品一覧</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    .post-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+    }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 12px;
+      margin: 12px 0;
+    }
+    .card img {
+      max-width: 100px;
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
   <!-- 🔗 出品ページへのリンク -->
   <a class="post-link" href="post.html">📤 出品する</a>
 
-  <!-- 🔍 検索フォーム（任意で後から使える） -->
-  <form id="searchForm">
-    <input type="text" id="searchTitle" placeholder="タイトル">
-    <input type="text" id="searchPrice" placeholder="価格">
-    <input type="text" id="searchSeller" placeholder="出品者名">
-    <button type="submit">検索</button>
-  </form>
+  <!-- 🛍️ 出品一覧 -->
+  <h1>🛍️ 出品一覧</h1>
+  <div id="postList"><!-- Firebaseの出品データがここに表示される --></div>
 
-  <!-- 🛍 出品一覧表示 -->
-  <h1>🛍 出品一覧</h1>
-  <div id="postList"><!-- 出品アイテムがここに表示される --></div>
-
-  <!-- 📜 投稿表示スクリプト -->
+  <!-- 🔄 投稿表示スクリプト -->
   <script type="module" src="app/show-posts.js"></script>
-
 </body>
 </html>

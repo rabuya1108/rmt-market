@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RMTマーケット｜出品一覧</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-    .post-link {
-      display: inline-block;
-      margin-bottom: 20px;
-      text-decoration: none;
-      font-weight: bold;
-      color: #007bff;
-    }
-    .card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #fff;
-      padding: 12px;
-      margin: 12px 0;
-    }
-    .card img {
-      max-width: 100px;
-      display: block;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RMTマーケット - 出品一覧</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .post-card {
+        background: #fff;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .post-card img {
+        max-width: 100px;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+      }
+      .btn-post {
+        text-decoration: none;
+        background: #007bff;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>🍯 RMTマーケット</h1>
+      <a href="post.html" class="btn-post">＋ 出品</a>
+    </header>
+    <main id="postList">
+      <!-- 投稿一覧 -->
+    </main>
 
-  <!-- 🔗 出品ページへのリンク -->
-  <a class="post-link" href="post.html">📤 出品する</a>
-
-  <!-- 🛍️ 出品一覧 -->
-  <h1>🛍️ 出品一覧</h1>
-  <div id="postList"><!-- Firebaseの出品データがここに表示される --></div>
-
-  <!-- 🔄 投稿表示スクリプト -->
-  <script type="module" src="app/show-posts.js"></script>
-</body>
+    <script type="module" src="show-posts.js"></script>
+    <script type="module" src="firebase.js"></script>
+  </body>
 </html>

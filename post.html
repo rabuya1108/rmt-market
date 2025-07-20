@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>出品フォーム</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>📝 出品フォーム</h1>
+    <a href="index.html" class="btn-post">← 戻る</a>
+  </header>
+
+  <main class="post-list">
+    <div class="post-card">
+      <label>商品名<input type="text" id="itemName" placeholder="例：○○アカウント" /></label><br/>
+      <label>価格<input type="number" id="itemPrice" placeholder="円" /></label><br/>
+      <label>出品者名<input type="text" id="sellerName" placeholder="ニックネーム" /></label><br/>
+      <label>商品画像（最大8枚）<input type="file" id="itemImages" multiple accept="image/*" /></label><br/>
+      <button id="postBtn">出品</button>
+    </div>
+  </main>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="submit.js"></script>
+</body>
+</html>

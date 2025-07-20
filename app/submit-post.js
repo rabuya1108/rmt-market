@@ -1,51 +1,36 @@
-// submit-post.js
+// app/submit-post.js
+import { db } from './firebase.js';
+import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-import { db, storage } from './firebase.js';
-import { collection, addDoc, Timestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
-
-const form = document.getElementById('postForm');
-const imageInput = document.getElementById('imageInput');
-const previewContainer = document.getElementById('imagePreview');
-
-form.addEventListener('submit', async (e) => {
+document.getElementById('postForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const itemName = document.getElementById('itemName').value.trim();
-  const itemPrice = document.getElementById('itemPrice').value.trim();
-  const sellerName = document.getElementById('sellerName').value.trim();
-  const itemDescription = document.getElementById('itemDescription').value.trim();
-  const files = [...imageInput.files].slice(0, 8); // 最大8枚
-
-  if (!itemName || !itemPrice || !sellerName) {
-    alert('必須項目（タイトル・価格・出品者名）を入力してください');
-    return;
-  }
-
+  const item = document.getElementById('item').value;
+  const price = document.getElementById('price').value;
+  const seller = document.getElementById('seller').value;
+  const description = document.getElementById('description').value;
+  const imageInput = document.getElementById('images');
+  
   const imageUrls = [];
 
+  for (let file of imageInput.files) {
+    const url = URL.createObjectURL(file);
+    imageUrls.push(url); // 仮：本番はFirebase Storage推奨
+  }
+
   try {
-    for (const file of files) {
-      const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      imageUrls.push(url);
-    }
-
     await addDoc(collection(db, 'posts'), {
-      item: itemName,
-      price: itemPrice,
-      seller: sellerName,
-      description: itemDescription,
+      item,
+      price,
+      seller,
+      description,
       images: imageUrls,
-      createdAt: Timestamp.now(),
+      createdAt: serverTimestamp()
     });
-
-    alert('✅ 出品が完了しました！');
-    form.reset();
-    previewContainer.innerHTML = '';
-  } catch (error) {
-    console.error('出品エラー:', error);
-    alert('エラーが発生しました。もう一度お試しください。');
+    alert('出品完了！');
+    location.href = '/'; // 出品後トップへ戻る
+  } catch (err) {
+    console.error('出品エラー:', err);
+    alert('出品に失敗しました');
   }
 });

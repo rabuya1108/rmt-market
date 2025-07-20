@@ -3,26 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>出品フォーム</title>
+  <title>投稿詳細 | RMTマーケット</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
-    <h1>📝 出品フォーム</h1>
-    <a href="index.html" class="btn-post">← 戻る</a>
+    <h1>🎮 投稿詳細</h1>
+    <a href="index.html" class="btn-back">← 戻る</a>
   </header>
 
-  <main class="post-list">
-    <div class="post-card">
-      <label>商品名<input type="text" id="itemName" placeholder="例：○○アカウント" /></label><br/>
-      <label>価格<input type="number" id="itemPrice" placeholder="円" /></label><br/>
-      <label>出品者名<input type="text" id="sellerName" placeholder="ニックネーム" /></label><br/>
-      <label>商品画像（最大8枚）<input type="file" id="itemImages" multiple accept="image/*" /></label><br/>
-      <button id="postBtn">出品</button>
-    </div>
+  <main class="post-detail" id="postDetail">
+    <!-- 詳細データがここに表示されます -->
   </main>
 
-  <script type="module" src="firebase.js"></script>
-  <script type="module" src="submit.js"></script>
+  <script type="module">
+    import { db } from './firebase.js';
+    import { ref, get } from 'firebase/database';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+    const postRef = ref(db, 'posts/' + postId);
+
+    const postDetail = document.getElementById('postDetail');
+
+    get(postRef).then(snapshot => {
+      const post = snapshot.val();
+      if (!post) {
+        postDetail.innerHTML = '<p>投稿が見つかりませんでした。</p>';
+        return;
+      }
+
+      const title = document.createElement('h2');
+      title.textContent = post.item;
+
+      const price = document.createElement('p');
+      price.innerHTML = `<strong>💴 価格:</strong> ${post.price}円`;
+
+      const seller = document.createElement('p');
+      seller.innerHTML = `<strong>👤 出品者:</strong> ${post.seller}`;
+
+      const description = document.createElement('p');
+      description.innerHTML = `<strong>📝 説明:</strong><br>${post.description || '（説明なし）'}`;
+
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'image-grid';
+
+      for (let i = 0; i < 8; i++) {
+        const imgUrl = post['image' + i];
+        if (imgUrl) {
+          const img = document.createElement('img');
+          img.src = imgUrl;
+          img.alt = `画像${i + 1}`;
+          imageContainer.appendChild(img);
+        }
+      }
+
+      postDetail.appendChild(title);
+      postDetail.appendChild(price);
+      postDetail.appendChild(seller);
+      postDetail.appendChild(description);
+      postDetail.appendChild(imageContainer);
+    });
+  </script>
 </body>
 </html>

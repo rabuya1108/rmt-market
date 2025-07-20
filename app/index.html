@@ -1,53 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RMTマーケット - 出品一覧</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-      body {
-        font-family: sans-serif;
-        background: #f4f4f4;
-        padding: 20px;
-      }
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-      }
-      .post-card {
-        background: #fff;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      }
-      .post-card img {
-        max-width: 100px;
-        border-radius: 5px;
-        margin-top: 0.5rem;
-      }
-      .btn-post {
-        text-decoration: none;
-        background: #007bff;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-      }
-    </style>
-  </head>
-  <body>
-    <header class="header">
-      <h1>🍯 RMTマーケット</h1>
-      <a href="post.html" class="btn-post">＋ 出品</a>
-    </header>
-    <main id="postList">
-      <!-- 投稿一覧 -->
-    </main>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>出品一覧</title>
+</head>
+<body>
+  <h1>📦 出品一覧</h1>
+  <div id="postList"></div>
 
-    <script type="module" src="show-posts.js"></script>
-    <script type="module" src="firebase.js"></script>
-  </body>
+  <!-- 表示用のJSを読み込む -->
+  <script type="module" src="./show-posts.js"></script>
+</body>
 </html>
